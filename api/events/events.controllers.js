@@ -1,6 +1,7 @@
 const Event = require("../../models/Event");
 
 exports.createEvent = async (req, res) => {
+  console.log("createEvent");
   try {
     const response = await Event.create({ ...req.body });
     res.status(201).json(response);
@@ -10,6 +11,7 @@ exports.createEvent = async (req, res) => {
 };
 
 exports.fetchEvents = async (req, res) => {
+  console.log("fetchEvents");
   try {
     const response = await Event.find();
     res.status(201).json(response);
@@ -19,6 +21,7 @@ exports.fetchEvents = async (req, res) => {
 };
 
 exports.getEventById = async (req, res) => {
+  console.log("getEventById");
   const { eventId } = req.params;
   try {
     const response = await Event.findById(eventId).exec();
@@ -30,6 +33,7 @@ exports.getEventById = async (req, res) => {
 };
 
 exports.updateEvent = async (req, res) => {
+  console.log("updateEvent");
   const { eventId } = req.params;
   const updates = req.body;
   try {
@@ -44,7 +48,7 @@ exports.updateEvent = async (req, res) => {
 };
 
 exports.deleteEvent = async (req, res) => {
-  console.log("I am here");
+  console.log("deleteEvent");
   const { eventId } = req.params;
   try {
     const event = await Event.findById(eventId);
@@ -54,6 +58,18 @@ exports.deleteEvent = async (req, res) => {
     } else {
       res.status(404).json({ message: "Event not found" });
     }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+exports.fetchFullyBookedEvents = async (req, res) => {
+  console.log("fetchFullyBookedEvents");
+  try {
+    const events = await Event.find().exec();
+    res
+      .status(201)
+      .json(events.filter((event) => event.numOfSeats === event.bookedSeats));
   } catch (error) {
     res.status(500).json({ message: error });
   }
