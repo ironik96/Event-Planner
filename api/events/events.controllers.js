@@ -17,3 +17,14 @@ exports.fetchEvents = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
+
+exports.getEventById = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const response = await Event.findById(eventId).exec();
+    if (response) res.status(201).json(response);
+    else res.status(404).json({ message: "Account not found" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
