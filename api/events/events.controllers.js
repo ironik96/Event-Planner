@@ -42,3 +42,19 @@ exports.updateEvent = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
+
+exports.deleteEvent = async (req, res) => {
+  console.log("I am here");
+  const { eventId } = req.params;
+  try {
+    const event = await Event.findById(eventId);
+    if (event) {
+      await Event.deleteOne({ _id: eventId });
+      res.status(204).end();
+    } else {
+      res.status(404).json({ message: "Event not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
