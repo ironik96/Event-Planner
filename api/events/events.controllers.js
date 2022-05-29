@@ -23,7 +23,21 @@ exports.getEventById = async (req, res) => {
   try {
     const response = await Event.findById(eventId).exec();
     if (response) res.status(201).json(response);
-    else res.status(404).json({ message: "Account not found" });
+    else res.status(404).json({ message: "Event not found" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+exports.updateEvent = async (req, res) => {
+  const { eventId } = req.params;
+  const updates = req.body;
+  try {
+    const response = await Event.findById(eventId).exec();
+    if (response) {
+      await Event.findByIdAndUpdate(eventId, updates);
+      res.status(204).end();
+    } else res.status(404).json({ message: "Event not found" });
   } catch (error) {
     res.status(500).json({ message: error });
   }
